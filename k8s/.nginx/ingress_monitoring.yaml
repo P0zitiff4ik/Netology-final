@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: monitoring-ingress
+  namespace: monitoring
+spec:
+  tls:
+    - hosts:
+        - netology-diploma.ru
+        - "*.netology-diploma.ru"
+      secretName: k8s-secret
+  ingressClassName: nginx
+  rules:
+    - host: grafana.netology-diploma.ru
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: grafana
+                port:
+                  number: 3000

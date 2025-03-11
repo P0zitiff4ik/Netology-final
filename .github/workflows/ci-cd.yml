@@ -1,0 +1,66 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      # Шаг 1: Клонирование репозитория
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Шаг 2: Настройка Docker Buildx для современных возможностей сборки
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Шаг 3: Аутентификация в Yandex Container Registry (или другом, например, DockerHub)
+      - name: Login to Container Registry
+        run: |
+          echo "${{ secrets.YC_REGISTRY_TOKEN }}" | docker login --username oauthtoken --password-stdin cr.yandex
+
+      # Шаг 4: Сборка и отправка Docker-образа
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          # Здесь переменная secrets.YC_REGISTRY_ID содержит ID вашего реестра, а
+          # my-test-app – имя образа; tag может быть "latest" или версионным.
+          tags: cr.yandex/${{ secrets.YC_REGISTRY_ID }}/my-test-app:latest
+
+  deploy:
+    name: Deploy to Kubernetes
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      # Шаг 1: Клонирование репозитория (если требуется для доступа к манифестам)
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Шаг 2: Установка kubectl – клиент для управления кластером Kubernetes
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: '1.25.0'  # выберите версию, соответствующую вашему кластеру
+
+      # Шаг 3: Конфигурация доступа к вашему Kubernetes кластеру
+      # Здесь предполагается, что содержимое kubeconfig вы храните в секрете с именем KUBE_CONFIG
+      - name: Configure kubeconfig
+        run: |
+          echo "${{ secrets.KUBE_CONFIG }}" > kubeconfig.yaml
+          export KUBECONFIG=$(pwd)/kubeconfig.yaml
+
+      # Шаг 4: Обновление приложения в кластере (например, обновление образа в Deployment)
+      - name: Deploy new image to Kubernetes
+        run: |
+          kubectl set image deployment/nginx-deployment \
+            nginx=cr.yandex/${{ secrets.YC_REGISTRY_ID }}/my-test-app:latest \
+            --namespace=ns
