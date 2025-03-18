@@ -30,7 +30,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
-          context: .
+          context: ./container
+          file: ./container/Dockerfile
           push: true
           # Здесь переменная secrets.YC_REGISTRY_ID содержит ID реестра, а
           # my-test-app – имя образа; tag может быть "latest" или версионным.
