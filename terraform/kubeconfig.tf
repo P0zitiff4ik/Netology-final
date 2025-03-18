@@ -13,18 +13,15 @@ data "yandex_kubernetes_cluster" "kubernetes" {
 # }
 
 locals {
-  ca_cert_oneline = replace(
-    data.yandex_kubernetes_cluster.kubernetes.master.0.cluster_ca_certificate,
-    "\n",
-    ""
-  )
+  # Преобразуем PEM-сертификат в Base64 (теперь его можно безопасно вставлять в kubeconfig)
+  ca_cert_base64 = base64encode(data.yandex_kubernetes_cluster.kubernetes.master.0.cluster_ca_certificate)
+  k8s_token_base64 = base64encode(data.yandex_client_config.client.iam_token)
   kubeconfig_content = templatefile("${path.module}/templates/kubeconfig.tpl", {
-    ca_cert   = local.ca_cert_oneline
+    ca_cert   = local.ca_cert_base64
     endpoint  = data.yandex_kubernetes_cluster.kubernetes.master.0.external_v4_endpoint
-    k8s_token = data.yandex_client_config.client.iam_token
+    k8s_token = local.k8s_token_base64
   })
 }
-
 output "kubeconfig" {
   description = "Generated kubeconfig content"
   value     = local.kubeconfig_content
