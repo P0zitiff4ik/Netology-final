@@ -63,7 +63,7 @@ jobs:
 
       # Шаг 4: Создание namespace (если требуется)
       - name: Create namespace ns
-        run: kubectl create namespace ns || echo "Namespace ns already exists"
+        run: kubectl create namespace ns --kubeconfig=$KUBECONFIG || echo "Namespace ns already exists"
 
 
       # Шаг 4: Обновление приложения в кластере (например, обновление образа в Deployment)
@@ -71,4 +71,4 @@ jobs:
         run: |
           kubectl set image deployment/nginx-deployment \
             nginx=cr.yandex/${{ secrets.YC_REGISTRY_ID }}/my-test-app:latest \
-            --namespace=ns
+            --namespace=ns --kubeconfig=$KUBECONFIG
