@@ -35,14 +35,6 @@ variable "account_id" {
   description = ""
 }
 
-variable "ssh_public_key_path" {
-  default = "~/.ssh/id_ed25519.pub"
-}
-
-variable "ssh_private_key_base64_path" {
-  default = "~/.ssh/id_ed25519_base64"
-}
-
 variable "github_token" {
   type        = string
   description = "https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token"
