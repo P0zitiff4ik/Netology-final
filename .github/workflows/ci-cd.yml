@@ -41,6 +41,8 @@ jobs:
     name: Deploy to Kubernetes
     needs: build
     runs-on: ubuntu-latest
+    env:
+      KUBECONFIG: ${{ github.workspace }}/kubeconfig.yaml
     steps:
       # Шаг 1: Клонирование репозитория (если требуется для доступа к манифестам)
       - name: Checkout repository
@@ -57,7 +59,6 @@ jobs:
       - name: Configure kubeconfig
         run: |
           printf "%b" "${{ secrets.KUBE_CONFIG }}" > kubeconfig.yaml
-          export KUBECONFIG=$(pwd)/kubeconfig.yaml
           kubectl config use-context default --kubeconfig=$KUBECONFIG
           kubectl get namespace --kubeconfig=$KUBECONFIG
 
