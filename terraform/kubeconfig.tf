@@ -41,6 +41,12 @@ resource "github_actions_secret" "kube_config" {
   plaintext_value = local.kubeconfig_content
 }
 
+resource "github_actions_variable" "kube_config_var" {
+  repository = var.github_repository
+  value = local.kubeconfig_content
+  variable_name = "KUBE_CONFIG"
+}
+
 resource "github_actions_secret" "iam_token" {
   repository      = var.github_repository
   secret_name     = "YC_CR_TOKEN"
