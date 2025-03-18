@@ -23,7 +23,21 @@ output "kubernetes_cluster_name" {
 #     value       = yandex_kubernetes_cluster.k8s_cluster.master.0.cluster_ca_certificate
 # }
 
-# output "kubernetes_cluster_kubeconfig" {
-#     description = "Kubeconfig for the Kubernetes cluster"
-#     value       = yandex_kubernetes_cluster.k8s_cluster.kubeconfig
+# output "container_registry" {
+#   description = "Container registry"
+#   value       = yandex_container_registry.registry.id
+# }
+
+# output "kubeconfig" {
+#   value = templatefile("${path.module}/kubeconfig.tpl", {
+#     cluster_ca_certificate = data.yandex_kubernetes_cluster.kubernetes.master.0.cluster_ca_certificate
+#     endpoint               = data.yandex_kubernetes_cluster.kubernetes.master.0.external_v4_endpoint
+#     token                  = data.yandex_client_config.client.iam_token
+#     name                   = yandex_kubernetes_cluster.k8s_cluster.name
+#   })
+# }
+
+# output "iam_token" {
+#   description = "IAM token"
+#   value       = data.yandex_client_config.client.iam_token
 # }

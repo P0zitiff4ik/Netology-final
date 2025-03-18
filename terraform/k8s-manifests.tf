@@ -62,8 +62,8 @@ data "template_file" "extsecret" {
     target_type       = "kubernetes.io/tls"
     secret_key_crt    = "tls.crt"
     secret_key_key    = "tls.key"
-    certificate_id    = data.yandex_cm_certificate.le-certificate.id
-    # certificate_id   = "fpq4bf4qfj0krumg039i"
+    # certificate_id    = data.yandex_cm_certificate.le-certificate.id
+    certificate_id   = "fpq3p2o1phairijigkl4"
     property_chain   = "chain"
     property_private = "privateKey"
   }

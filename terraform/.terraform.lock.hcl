@@ -16,10 +16,18 @@ provider "registry.terraform.io/hashicorp/template" {
   ]
 }
 
+provider "registry.terraform.io/integrations/github" {
+  version     = "6.6.0"
+  constraints = "~> 6.0"
+  hashes = [
+    "h1:Fp0RrNe+w167AQkVUWC1WRAsyjhhHN7aHWUky7VkKW8=",
+  ]
+}
+
 provider "registry.terraform.io/yandex-cloud/yandex" {
-  version     = "0.136.0"
+  version     = "0.139.0"
   constraints = ">= 0.99.0"
   hashes = [
-    "h1:7wwpE68VzzTfEcwkvCPwa3JpC1vPs42cxueWUyTqPfM=",
+    "h1:gCnpKwb56b+nOvgNcYbD5q5PF6EQTba16UpPu/vDH6A=",
   ]
 }

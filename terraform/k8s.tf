@@ -4,6 +4,9 @@ resource "yandex_kubernetes_cluster" "k8s_cluster" {
     yandex_resourcemanager_folder_iam_member.k8s-node-sa,
     module.vpc_prod
   ]
+  timeouts {
+    create = "10m"   # или используйте другое подходящее значение
+  }
   name               = "diploma-cluster"
   description        = "Kubernetes cluster for diploma project"
   service_account_id = yandex_iam_service_account.k8s-res-sa.id
@@ -31,7 +34,7 @@ resource "yandex_kubernetes_cluster" "k8s_cluster" {
         subnet_id = module.vpc_prod.vpc_subnet_id[2]
       }
     }
-    version = "1.28"
+    version = "1.29"
     public_ip = true
     security_group_ids = [yandex_vpc_security_group.example.id]
     maintenance_policy {
@@ -65,7 +68,7 @@ resource "yandex_kubernetes_node_group" "workers" {
   cluster_id = yandex_kubernetes_cluster.k8s_cluster.id
   name       = "diploma-node-group"
   description = "Node group for diploma project"
-  version    = "1.28"
+  version    = "1.29"
   labels = {
     "environment" = "production"
   }

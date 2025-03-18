@@ -21,10 +21,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # Шаг 3: Аутентификация в Yandex Container Registry (или другом, например, DockerHub)
+      # Шаг 3: Аутентификация в Yandex Container Registry
       - name: Login to Container Registry
         run: |
-          echo "${{ secrets.YC_REGISTRY_TOKEN }}" | docker login --username oauthtoken --password-stdin cr.yandex
+          echo "${{ secrets.YC_CR_TOKEN }}" | docker login --username iam --password-stdin cr.yandex
 
       # Шаг 4: Сборка и отправка Docker-образа
       - name: Build and push Docker image
@@ -32,7 +32,7 @@ jobs:
         with:
           context: .
           push: true
-          # Здесь переменная secrets.YC_REGISTRY_ID содержит ID вашего реестра, а
+          # Здесь переменная secrets.YC_REGISTRY_ID содержит ID реестра, а
           # my-test-app – имя образа; tag может быть "latest" или версионным.
           tags: cr.yandex/${{ secrets.YC_REGISTRY_ID }}/my-test-app:latest
 
@@ -49,7 +49,7 @@ jobs:
       - name: Set up kubectl
         uses: azure/setup-kubectl@v3
         with:
-          version: '1.25.0'  # выберите версию, соответствующую вашему кластеру
+          version: '1.28.0'  # выберите версию, соответствующую вашему кластеру
 
       # Шаг 3: Конфигурация доступа к вашему Kubernetes кластеру
       # Здесь предполагается, что содержимое kubeconfig вы храните в секрете с именем KUBE_CONFIG
@@ -57,6 +57,10 @@ jobs:
         run: |
           echo "${{ secrets.KUBE_CONFIG }}" > kubeconfig.yaml
           export KUBECONFIG=$(pwd)/kubeconfig.yaml
+          kubectl config use-context default \
+            --kubeconfig=$KUBECONFIG
+          kubectl get namespace --kubeconfig=test.kubeconfig
+
 
       # Шаг 4: Обновление приложения в кластере (например, обновление образа в Deployment)
       - name: Deploy new image to Kubernetes

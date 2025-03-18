@@ -25,10 +25,10 @@ variable "platform" {
 #   description = "https://cloud.yandex.ru/docs/iam/operations/iam-token/create"
 # }
 
-variable "key_file" {
-  type        = string
-  description = "https://cloud.yandex.ru/docs/iam/operations/iam-token/create"
-}
+# variable "key_file" {
+#   type        = string
+#   description = "https://cloud.yandex.ru/docs/iam/operations/iam-token/create"
+# }
 
 variable "account_id" {
   type        = string
@@ -41,4 +41,20 @@ variable "ssh_public_key_path" {
 
 variable "ssh_private_key_base64_path" {
   default = "~/.ssh/id_ed25519_base64"
+}
+
+variable "github_token" {
+  type        = string
+  description = "https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token"
+}
+
+variable "github_owner" {
+  type        = string
+  description = "https://docs.github.com/en/github/setting-up-and-managing-organizations-and-teams/about-organizations"
+}
+
+variable "github_repository" {
+  type        = string
+  description = "https://docs.github.com/en/github/getting-started-with-github/create-a-repo"
+  default = "Netology-final"
 }
