@@ -2,7 +2,7 @@ apiVersion: v1
 clusters:
 - cluster:
     certificate-authority-data: "${ca_cert}"
-    server: "https://${endpoint}"
+    server: "${endpoint}"
   name: yandex
 contexts:
 - context:
