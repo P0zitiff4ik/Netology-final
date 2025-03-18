@@ -5,8 +5,6 @@ resource "yandex_kubernetes_cluster" "k8s_cluster" {
     module.vpc_prod
   ]
   timeouts {
-    create = "10m"   # или используйте другое подходящее значение
-  }
   name               = "diploma-cluster"
   description        = "Kubernetes cluster for diploma project"
   service_account_id = yandex_iam_service_account.k8s-res-sa.id
