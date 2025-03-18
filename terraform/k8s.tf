@@ -4,7 +4,6 @@ resource "yandex_kubernetes_cluster" "k8s_cluster" {
     yandex_resourcemanager_folder_iam_member.k8s-node-sa,
     module.vpc_prod
   ]
-  timeouts {
   name               = "diploma-cluster"
   description        = "Kubernetes cluster for diploma project"
   service_account_id = yandex_iam_service_account.k8s-res-sa.id
