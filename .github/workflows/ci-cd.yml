@@ -56,7 +56,7 @@ jobs:
       # Здесь предполагается, что содержимое kubeconfig вы храните в секрете с именем KUBE_CONFIG
       - name: Configure kubeconfig
         run: |
-          echo "${{ vars.KUBE_CONFIG }}" > kubeconfig.yaml
+          printf "%s" "${{ vars.KUBE_CONFIG }}" > kubeconfig.yaml
           export KUBECONFIG=$(pwd)/kubeconfig.yaml
           kubectl config use-context default --kubeconfig=$KUBECONFIG
           kubectl get namespace --kubeconfig=$KUBECONFIG
