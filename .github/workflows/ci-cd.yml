@@ -66,8 +66,13 @@ jobs:
 
       # Шаг 4: Создание namespace (если требуется)
       - name: Create namespace ns
-        run: kubectl create namespace ns --kubeconfig=$KUBECONFIG || echo "Namespace ns already exists"
-
+        run: |
+          kubectl apply -f - <<EOF
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: ns
+          EOF
 
       # Шаг 4: Обновление приложения в кластере (например, обновление образа в Deployment)
       - name: Deploy new image to Kubernetes
