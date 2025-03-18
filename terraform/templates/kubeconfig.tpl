@@ -1,7 +1,8 @@
 apiVersion: v1
 clusters:
 - cluster:
-    certificate-authority-data: "${ca_cert}"
+    certificate-authority-data: |
+      "${ca_cert}"
     server: "${endpoint}"
   name: yandex
 contexts:
@@ -15,4 +16,5 @@ preferences: {}
 users:
 - name: yandex-cloud
   user:
-    token: "${k8s_token}"
+    token: |
+      "${k8s_token}"
