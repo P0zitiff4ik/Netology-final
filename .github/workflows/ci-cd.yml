@@ -70,52 +70,6 @@ jobs:
           kubectl config use-context default --kubeconfig=$KUBECONFIG
           kubectl get namespace --kubeconfig=$KUBECONFIG
 
-      # - name: Add Helm Repositories & Update
-      #   run: |
-      #     helm repo add external-secrets https://charts.external-secrets.io
-      #     helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-      #     helm repo update
-
-      # - name: Clone kube-prometheus repository
-      #   run: |
-      #     # Клонируем репозиторий prometheus-operator, если его ещё нет
-      #     rm -rf k8s/kube-prometheus || true
-      #     git clone https://github.com/prometheus-operator/kube-prometheus.git k8s/kube-prometheus
-
-      # - name: Deploy Prometheus Operator (kube-prometheus)
-      #   run: |
-      #     # Применяем предварительную настройку с server-side apply
-      #     kubectl apply --server-side -f k8s/kube-prometheus/manifests/setup
-      #     # Ждём, пока все CRD окажутся установлены (можно изменить namespace, если требуется)
-      #     kubectl wait --for condition=Established --all CustomResourceDefinition --namespace=monitoring
-      #     # Применяем остальные манифесты
-      #     kubectl apply -f k8s/kube-prometheus/manifests/
-
-      # - name: Install External-Secrets Helm Chart
-      #   run: |
-      #     helm install external-secrets external-secrets/external-secrets --namespace external-secrets --create-namespace
-
-      # - name: Create Namespace "ns" and Secret for YC Auth
-      #   run: |
-      #     # Создание namespace, если он ещё не существует
-      #     kubectl apply -f - <<EOF
-      #     apiVersion: v1
-      #     kind: Namespace
-      #     metadata:
-      #       name: ns
-      #     EOF
-      #     # Создаем секрет yc-auth. Если секрет уже существует, команда вернет ошибку - добавляем || echo
-      #     kubectl --namespace ns create secret generic yc-auth --from-file=authorized-key=.authorized_key.json || echo "Secret yc-auth already exists"
-      
-      # - name: Install Ingress-Nginx Helm Chart with Custom Default SSL Certificate
-      #   run: |
-      #     helm install ingress-nginx ingress-nginx/ingress-nginx \
-      #       --namespace ns \
-      #       --set controller.extraArgs.default-ssl-certificate="ns/k8s-secret" || \
-      #     helm upgrade ingress-nginx ingress-nginx/ingress-nginx \
-      #       --namespace ns \
-      #       --set controller.extraArgs.default-ssl-certificate="ns/k8s-secret"
-
       # Шаг 4: Обновление приложения в кластере (например, обновление образа в Deployment)
       - name: Deploy new image to Kubernetes
         run: |
