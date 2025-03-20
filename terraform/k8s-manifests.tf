@@ -7,7 +7,7 @@ locals {
   }
 }
 
-# Data-блок для генерации манифеста для nginx
+# Генерация манифеста для ingress
 data "template_file" "ingress_nginx" {
   template = file("${path.module}/templates/ingress.tpl")
   vars = merge(
@@ -22,13 +22,12 @@ data "template_file" "ingress_nginx" {
   )
 }
 
-# Сохраняем сгенерированный файл для nginx
 resource "local_file" "ingress_nginx_file" {
   content  = data.template_file.ingress_nginx.rendered
   filename = "${path.module}/../k8s/ingress_nginx.yaml"
 }
 
-# Data-блок для генерации манифеста для мониторинга (например, Grafana)
+# Генерация манифеста для мониторинга (например, Grafana)
 data "template_file" "ingress_monitoring" {
   template = file("${path.module}/templates/ingress.tpl")
   vars = merge(
@@ -43,13 +42,12 @@ data "template_file" "ingress_monitoring" {
   )
 }
 
-# Сохраняем сгенерированный файл для мониторинга (Grafana)
 resource "local_file" "ingress_monitoring_file" {
   content  = data.template_file.ingress_monitoring.rendered
   filename = "${path.module}/../k8s/ingress_monitoring.yaml"
 }
 
-
+# Генерация манифеста для секрета
 data "template_file" "extsecret" {
   template = file("${path.module}/templates/extsecret.tpl")
   vars = {
@@ -74,6 +72,7 @@ resource "local_file" "extsecret_file" {
   filename = "${path.module}/../k8s/extsecret.yaml"
 }
 
+# Генерация манифеста для nginx
 data "template_file" "deployment_nginx" {
   template = file("${path.module}/templates/nginx-deployment.tpl")
   vars = {

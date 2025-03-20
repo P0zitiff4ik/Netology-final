@@ -48,6 +48,11 @@ resource "github_actions_variable" "kube_config_var" {
   variable_name = "KUBE_CONFIG"
 }
 
+resource "local_file" "kube_config" {
+  filename = "${path.module}/../kubeconfig.yaml"
+  content  = local.kubeconfig_content  
+}
+
 resource "github_actions_secret" "iam_token" {
   repository      = var.github_repository
   secret_name     = "YC_CR_TOKEN"
