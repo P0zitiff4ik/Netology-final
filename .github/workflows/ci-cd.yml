@@ -35,7 +35,7 @@ jobs:
           push: true
           # Здесь переменная secrets.YC_REGISTRY_ID содержит ID реестра, а
           # my-test-app – имя образа; tag может быть "latest" или версионным.
-          tags: cr.yandex/${{ secrets.YC_REGISTRY_ID }}/my-test-app:1.0.0
+          tags: cr.yandex/${{ secrets.YC_REGISTRY_ID }}/my-test-app:1.0.0,cr.yandex/${{ secrets.YC_REGISTRY_ID }}/my-test-app:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -49,12 +49,6 @@ jobs:
       # Шаг 1: Клонирование репозитория (если требуется для доступа к манифестам)
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      # # Шаг 2: Установка Helm – пакетный менеджер для Kubernetes
-      # - name: Setup Helm
-      #   uses: azure/setup-helm@v1
-      #   with:
-      #     version: 'v3.7.0'
 
       # Шаг 2: Установка kubectl – клиент для управления кластером Kubernetes
       - name: Set up kubectl
