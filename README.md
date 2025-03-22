@@ -158,8 +158,9 @@
 2. Скриншот из Terraform Cloud: 
 ![tfstate_HCLcloud.png](img/tfstate_HCLcloud.png)
 3. Конфигурация Ansible для настройки созданного кластера: [playbook.yaml](playbook.yml)
-4. Репозиторий с Dockerfile: [container](container/)
-5. Репозиторий с конфигом k8s: [k8s](k8s/)
+4. Dockerfile: [container](container/)
+   1. Docker-image: `cr.yandex/crpf1dabjna4spg5n1aa/my-test-app:1.0.2`
+5. Конфиг k8s: [k8s](k8s/)
 6. 1. Тестовое приложение.
       1. Ссылка: https://netology-diploma.online/
       2. Скриншот:
