@@ -1,3 +1,5 @@
 token     = <"your_yandex_cloud_token">
 cloud_id  = <"your_yandex_cloud_id">
 folder_id = <"your_yandex_folder_id">
+github_token = <"your_token_from_github">
+github_owner = <"github_owner">

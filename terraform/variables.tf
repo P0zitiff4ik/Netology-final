@@ -20,16 +20,6 @@ variable "platform" {
   description = "https://cloud.yandex.ru/docs/compute/concepts/platforms"
 }
 
-# variable "token" {
-#   type        = string
-#   description = "https://cloud.yandex.ru/docs/iam/operations/iam-token/create"
-# }
-
-# variable "key_file" {
-#   type        = string
-#   description = "https://cloud.yandex.ru/docs/iam/operations/iam-token/create"
-# }
-
 variable "account_id" {
   type        = string
   description = ""
