@@ -1,6 +1,6 @@
 locals {
   common_ingress_vars = {
-    tls_host      = "netology-diploma.online"
+    tls_host      = "${resource.yandex_dns_zone.zone1}"
     secret_name   = "k8s-secret"
     ingress_class = "nginx"
     path          = "/"
@@ -15,7 +15,7 @@ data "template_file" "ingress_nginx" {
     {
       ingress_name = "nginx-ingress"
       namespace    = "ns"                  # пространство имён для nginx
-      rule_host    = "netology-diploma.online" # правило для nginx
+      rule_host    = "${local.common_ingress_vars.tls_host}" # правило для nginx
       service_name = "nginx-service"
       service_port = 80
     }
@@ -35,7 +35,7 @@ data "template_file" "ingress_monitoring" {
     {
       ingress_name = "monitoring-ingress"
       namespace    = "monitoring" # пространство имён для мониторинга (например, Grafana)
-      rule_host    = "grafana.netology-diploma.online"
+      rule_host    = "grafana.${local.common_ingress_vars.tls_host}" # правило для мониторинга
       service_name = "grafana"
       service_port = 3000
     }
@@ -47,7 +47,12 @@ resource "local_file" "ingress_monitoring_file" {
   filename = "${path.module}/../k8s/ingress_monitoring.yaml"
 }
 
-# Генерация манифеста для секрета
+# Генерация манифеста для секрета (TLS-сертификат)
+data "yandex_cm_certificate" "diploma-certificate" {
+  folder_id = var.folder_id
+  name      = "diploma-certificate"
+}
+
 data "template_file" "extsecret" {
   template = file("${path.module}/templates/extsecret.tpl")
   vars = {
@@ -60,8 +65,7 @@ data "template_file" "extsecret" {
     target_type       = "kubernetes.io/tls"
     secret_key_crt    = "tls.crt"
     secret_key_key    = "tls.key"
-    # certificate_id    = data.yandex_cm_certificate.le-certificate.id
-    certificate_id   = "fpq3p2o1phairijigkl4"
+    certificate_id   = "${data.yandex_cm_certificate.diploma-certificate.id}"
     property_chain   = "chain"
     property_private = "privateKey"
   }
@@ -72,7 +76,7 @@ resource "local_file" "extsecret_file" {
   filename = "${path.module}/../k8s/extsecret.yaml"
 }
 
-# Генерация манифеста для nginx
+# Генерация манифеста для приложения (например, nginx)
 data "template_file" "deployment_nginx" {
   template = file("${path.module}/templates/nginx-deployment.tpl")
   vars = {

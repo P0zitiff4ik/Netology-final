@@ -68,5 +68,5 @@ jobs:
       - name: Deploy new image to Kubernetes
         run: |
           kubectl set image deployment/nginx-deployment \
-            nginx=cr.yandex/${{ secrets.YC_REGISTRY_ID }}/my-test-app:1.0.0 \
+            nginx=cr.yandex/${{ secrets.YC_REGISTRY_ID }}/my-test-app:latest \
             --namespace=ns --kubeconfig=$KUBECONFIG
